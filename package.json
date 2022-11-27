@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "set NODE_ENV=dev && node build/index.js",
-    "dev": "ts-node-dev index.ts"
+    "start": "node ./build/src/server.js",
+    "dev": "ts-node-dev ./src/server.ts",
+    "lint": "eslint --ignore-path .gitignore . --ext .ts",
+    "lint:fix": "npm run lint -- --fix"
   },
   "keywords": [
     "task-manager",
