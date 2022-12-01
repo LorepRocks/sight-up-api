@@ -1,9 +1,10 @@
 import express, { NextFunction, Request, Response }  from "express";
 import login from "./login";
+import userRoutes from './users';
 
 const router = express.Router();
 
-const checkAuthenticated = (req: Request, res: Response, next: NextFunction ) => {
+export const checkAuthenticated = (req: Request, res: Response, next: NextFunction ) => {
     if (req.isAuthenticated()) { return next() }
     res.redirect("/login")
 }
@@ -17,6 +18,7 @@ export default () => {
   });
 
   router.use(login())
+  router.use(userRoutes())
 
   return router;
 }
