@@ -10,6 +10,7 @@ export const checkAuthenticated = (req: Request, res: Response, next: NextFuncti
 }
 export default () => {
   router.get("/dashboard", checkAuthenticated, (_req: Request, res: Response) => {
+    //req.user
     res.render("dashboard.ejs", { name: 'lorena' })
   });
   
