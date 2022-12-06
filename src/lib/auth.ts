@@ -1,6 +1,7 @@
 import { NextFunction } from 'express';
 import passport from 'passport';
 import { VerifyCallback } from 'passport-google-oauth2';
+import { saveUser, getUserByGoogleId } from '../controllers/user';
 const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 
 
@@ -19,17 +20,18 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:4000/auth/google/callback",
 }, async (_accessToken:string, _refreshToken:string,profile:any, done:VerifyCallback ) => {
     try{
-
-        console.log('__profile', profile)
+        let userCreated = null;
         const newUser = {
-            method: 'google',
-            google: {
-                id: profile.id,
-                name: profile.displayName,
-                email: profile.emails[0].value
-            }
+            id: profile.id,
+            displayName: profile.displayName,
+            picture: profile.picture,
+            email: profile.email
         }
-        return done(null, newUser);
+        const userExists = await getUserByGoogleId(profile.id);
+        if(!userExists){
+           userCreated = await saveUser(newUser);
+        }
+        return done(null, userCreated ? userCreated : userExists );
     }catch(err){
         return done(err, false)
     }
@@ -38,9 +40,8 @@ passport.use(new GoogleStrategy({
 
 passport.serializeUser((user: any, done: VerifyCallback) => done(null, user));
 
-passport.deserializeUser(async (id, done: VerifyCallback) => {
+passport.deserializeUser(async (user, done: VerifyCallback) => {
     try {
-        const user:any = { id: id, name: 'username'};
         return done(null, user);
     } catch(err){
         return done(err)
