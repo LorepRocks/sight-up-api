@@ -2,6 +2,7 @@ import express from "express";
 import session from 'express-session';
 import mongoose from "mongoose";
 import path from 'path';
+import morgan from "morgan";
 require('dotenv').config()
 
 import auth from "./lib/auth";
@@ -20,6 +21,7 @@ app.set('views', path.join(__dirname, './views'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(morgan('dev'));
 
 //Middleware
 app.use(session({

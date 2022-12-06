@@ -42,8 +42,7 @@ passport.serializeUser((user: any, done: VerifyCallback) => done(null, user));
 
 passport.deserializeUser(async (user, done: VerifyCallback) => {
     try {
-        const newUser:any = user;
-        return done(null, newUser);
+        return done(null, user);
     } catch(err){
         return done(err)
     }
