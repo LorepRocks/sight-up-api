@@ -24,7 +24,7 @@ interface WishList {
     wishes: Types.DocumentArray<Task>
 }
 
-interface User {
+export interface User {
     _id: Types.ObjectId,
     googleId: string,
     name: string,
